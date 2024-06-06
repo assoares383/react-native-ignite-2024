@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   FlatList,
   Alert,
@@ -12,42 +13,39 @@ import Participant from "../../components/Participant";
 import styles from "./styles";
 
 export default function Home() {
-  const participants = [
-    "Alexandre",
-    "Leticia",
-    "Maria",
-    "Jose",
-    "Manoel",
-    "Laura",
-    "Fabio",
-    "Douglas",
-    "Mara",
-    "Simone",
-    "Leandro",
-    "Marcos",
-  ];
+  const [participants, setParticipants] = useState<string[]>([])
+  const [participantName, setParticipantName] = useState("")
 
   const handleParticipantAdd = () => {
-    if(participants.includes("Alexandre")) {
-      return Alert.alert("Participante Existe", "Ja existe um participante na lista com esse nome")
+    if (participants.includes(participantName)) {
+      return Alert.alert(
+        "Participante Existe",
+        "Ja existe um participante na lista com esse nome"
+      );
     }
 
-    console.log("Clicou no botao de adicionar");
+    setParticipants(preState => [...preState, participantName])
+    setParticipantName('')
   };
 
   const handleParticipantRemove = (name: string) => {
-    Alert.alert('Remover', `Remover o participante ${name}?`, [
+    Alert.alert("Remover", `Remover o participante ${name}?`, [
       {
-        text: 'Sim',
-        onPress: () => Alert.alert('Deletado!')
+        text: "Sim",
+        onPress: () => setParticipants(prevState => prevState.filter(participant => participant !== name)),
       },
       {
-        text: 'Nao',
-        style: 'cancel'
-      }
-    ])
+        text: "Nao",
+        style: "cancel",
+      },
+    ]);
     console.log(`Voce clicou em remover o participante ${name}!!`);
   };
+
+  // const handleSttate = (value: string) => {
+  //   setParticipantName(value)
+  //   console.log(participantName)
+  // } 
 
   return (
     <View style={styles.container}>
@@ -60,6 +58,8 @@ export default function Home() {
           style={styles.input}
           placeholder="Digite o nome do participante"
           placeholderTextColor="#686B6B"
+          onChangeText={setParticipantName}
+          value={participantName}
         />
 
         <TouchableOpacity style={styles.button} onPress={handleParticipantAdd}>
@@ -79,8 +79,8 @@ export default function Home() {
 
       <FlatList
         data={participants}
-        keyExtractor={item => item}
-        renderItem={({ item}) => (
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => (
           <Participant
             key={item}
             name={item}
