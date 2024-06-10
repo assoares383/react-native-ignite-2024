@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { Button } from '@components/Button';
 import { GroupCard } from '@components/GroupCard';
 import { Header } from '@components/Header';
 import { Highlight } from '@components/HighLight'
@@ -35,6 +36,8 @@ export default function Groups() {
           />
         )}
       />
+
+      <Button title="Criar Nova Turma" />
     </Container>
   );
 }
