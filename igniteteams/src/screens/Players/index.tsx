@@ -1,6 +1,7 @@
 import { Container, Form } from './styles'
 
 import { ButtonIcon } from '@components/ButtonIcon';
+import { Filter } from '@components/Filter';
 import { Header } from '@components/Header';
 import { Highlight } from '@components/HighLight';
 import { Input } from '@components/Input';
@@ -23,6 +24,11 @@ export default function Players() {
 
         <ButtonIcon icon='add' />
       </Form>
+
+      <Filter 
+        title="Time  A"
+        isActive
+      />
     </Container>
   );
 }
