@@ -10,9 +10,9 @@ import { Loading } from '@components/Loading'
 
 import theme from "./src/theme";
 
-// import Groups from "@screens/Groups";
+import Groups from "@screens/Groups";
 // import NewGroup from '@screens/NewGroup';
-import Players from '@screens/Players';
+// import Players from '@screens/Players';
 
 export default function App() {
   const [ fontsLoaded ] = useFonts({
@@ -28,7 +28,7 @@ export default function App() {
         translucent
       />
       {
-        fontsLoaded ? <Players /> : <Loading />
+        fontsLoaded ? <Groups /> : <Loading />
       }
     </ThemeProvider>
   );
