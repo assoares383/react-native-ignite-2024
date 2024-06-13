@@ -10,9 +10,7 @@ import { Loading } from '@components/Loading'
 
 import theme from "./src/theme";
 
-import Groups from "@screens/Groups";
-// import NewGroup from '@screens/NewGroup';
-// import Players from '@screens/Players';
+import { Routes } from './src/routes';
 
 export default function App() {
   const [ fontsLoaded ] = useFonts({
@@ -28,7 +26,7 @@ export default function App() {
         translucent
       />
       {
-        fontsLoaded ? <Groups /> : <Loading />
+        fontsLoaded ? <Routes /> : <Loading />
       }
     </ThemeProvider>
   );
