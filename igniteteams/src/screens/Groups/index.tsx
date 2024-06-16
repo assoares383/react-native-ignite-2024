@@ -10,13 +10,13 @@ import { ListEmpty } from '@components/ListEmpty'
 
 import { Container } from './styles'
 
-
 export default function Groups() {
   const [groups, setGroups] = useState<string[]>([])
-  const navigation = useNavigation();
+
+  const navigation = useNavigation()
 
   function handleNewGroup() {
-    navigation.navigate('new');
+    navigation.navigate('new')
   }
 
   return (
