@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
+
+import { groupsGetAll } from '@storage/group/groupsGetAll';
 
 import { Button } from '@components/Button';
 import { GroupCard } from '@components/GroupCard';
@@ -18,6 +20,20 @@ export default function Groups() {
   function handleNewGroup() {
     navigation.navigate('new')
   }
+
+  async function fetchGroups() {
+    try {
+      const data = await groupsGetAll();
+      setGroups(data);
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    console.log("Use Effect executou")
+    fetchGroups();
+  }, []);
 
   return (
     <Container>
