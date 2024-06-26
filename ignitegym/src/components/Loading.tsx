@@ -2,8 +2,8 @@ import { Center, Spinner } from 'native-base'
 
 export function Loading() {
     return (
-        <Center flex={1}>
-            <Spinner />
+        <Center flex={1} bg="gray.700">
+            <Spinner bg="gray.500" />
         </Center>
     )
 }
