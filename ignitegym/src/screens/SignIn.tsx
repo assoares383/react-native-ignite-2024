@@ -20,7 +20,7 @@ export function SignIn() {
                     <LogoSvg />
 
                     <Text color="gray.100" fontSize="sm">
-                        Treien sua mente e o seu corpo
+                        Treine sua mente e o seu corpo
                     </Text>
                 </Center>
 
@@ -47,12 +47,11 @@ export function SignIn() {
                     <Text color="gray.100" fontFamily="body" fontSize="sm" mb={3}>
                         Ainda nao tem acesso?
                     </Text>
+                    <Button 
+                        title="Criar conta" 
+                        variant="outline" 
+                    />
                 </Center>
-
-                <Button 
-                    title="Criar conta" 
-                    variant="outline" 
-                />
             </VStack>
         </ScrollView>
     )
