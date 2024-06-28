@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { Center, Heading, Image, ScrollView, Text, VStack  } from 'native-base';
 
-import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
+import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
 
 import LogoSvg from '@assets/logo.svg';
 import BackgroundImg from '@assets/background.png';
@@ -21,6 +21,7 @@ export function SignIn() {
             <VStack flex={1} px={10} pb={16} >
                 <Image 
                     source={BackgroundImg}
+                    defaultSource={BackgroundImg}
                     alt='Pessoas treinando'
                     resizeMode="cover"
                     position="absolute"
