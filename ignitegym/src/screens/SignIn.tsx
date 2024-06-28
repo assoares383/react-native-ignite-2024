@@ -1,4 +1,4 @@
-import { Center, Heading, Image, ScrollView,Text , VStack  } from 'native-base';
+import { Center, Heading, Image, ScrollView, Text, VStack  } from 'native-base';
 
 import LogoSvg from '@assets/logo.svg';
 import BackgroundImg from '@assets/background.png';
@@ -8,14 +8,15 @@ import { Input } from '../components/Input';
 
 export function SignIn() {
     return (
-        <ScrollView contentContainerStyle={{flexGrow: 1}} showsVerticalScrollIndicator={false}>
-            <VStack flex={1} bg="gray.700" px={10}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+            <VStack flex={1} bg="gray.700" px={10} pb={16} >
                 <Image 
-                    source={BackgroundImg} 
-                    alt='Pessoas treinando' 
-                    resizeMode='cover' 
-                    position="absolute" 
+                    source={BackgroundImg}
+                    alt='Pessoas treinando'
+                    resizeMode="cover"
+                    position="absolute"
                 />
+
                 <Center my={24}>
                     <LogoSvg />
 
