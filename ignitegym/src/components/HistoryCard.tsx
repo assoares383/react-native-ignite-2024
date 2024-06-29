@@ -4,7 +4,8 @@ export function HistoryCard() {
     return (
         <HStack 
             w="full" 
-            px={4} 
+            px={5}
+            py={4}
             mb={3} 
             bg="gray.600" 
             rounded="md" 
