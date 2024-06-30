@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Heading, SectionList, VStack } from 'native-base';
+import { Heading, SectionList, Text, VStack } from 'native-base';
 
 import { ScreenHeader } from '../components/ScreenHeader';
 import { HistoryCard } from '../components/HistoryCard';
@@ -21,7 +21,7 @@ export function History() {
             <ScreenHeader title="Historico de Exercicios" />
 
             <SectionList 
-                sections={exercises}
+                sections={[]}
                 keyExtractor={item => item}
                 renderItem={({ item }) => (
                     <HistoryCard />
@@ -32,6 +32,13 @@ export function History() {
                     </Heading>
                 )}
                 px={8}
+                contentContainerStyle={[].length === 0 && { flex: 1, justifyContent: 'center' }}
+                ListEmptyComponent={() => (
+                    <Text color="gray.100" textAlign="center">
+                        Nao ha exercicios registrados ainda. {'\n'}
+                        Vamos fazer exercicios hoje?
+                    </Text>
+                )}
             />
         </VStack>
     )
