@@ -8,7 +8,7 @@ import {
   Text,
   VStack,
 } from "native-base";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 
 import { ScreenHeader } from "../components/ScreenHeader";
 import { UserPhoto } from "../components/UserPhoto";
@@ -19,19 +19,30 @@ const PHOTO_SIZE = 33;
 
 export function Profile() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
-  const [userPhoto, setUserPhoto] = useState('https://avatars.githubusercontent.com/u/15836394?v=4')
+  const [userPhoto, setUserPhoto] = useState(
+    "https://avatars.githubusercontent.com/u/15836394?v=4"
+  );
 
   async function handleUserPhotoSelect() {
-    const photoSelected = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-      aspect: [4, 4],
-      allowsEditing: true
-    })
+    setPhotoIsLoading(true);
+    try {
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true,
+      });
 
-    if (photoSelected.canceled) return;
+      if (photoSelected.canceled) return;
 
-    setUserPhoto(photoSelected.assets[0].uri)
+      if (photoSelected.assets[0].uri) {
+        setUserPhoto(photoSelected.assets[0].uri);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setPhotoIsLoading(false);
+    }
   }
 
   return (
@@ -83,12 +94,13 @@ export function Profile() {
 
           <Input bg="gray.600" placeholder="Nova senha" secureTextEntry />
 
-          <Input bg="gray.600" placeholder="Confirme a nova senha" secureTextEntry />
-
-          <Button 
-            title="Atualizar"
-            mt={4}
+          <Input
+            bg="gray.600"
+            placeholder="Confirme a nova senha"
+            secureTextEntry
           />
+
+          <Button title="Atualizar" mt={4} />
         </VStack>
       </ScrollView>
     </VStack>
