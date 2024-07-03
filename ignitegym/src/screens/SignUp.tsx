@@ -24,7 +24,7 @@ export function SignUp() {
   }
 
   function handleSignUp({name, email, password, confirm_password}: FormDataProps) {
-    console.log(data)
+    console.log(name, email, password, confirm_password)
   }
 
   return (
