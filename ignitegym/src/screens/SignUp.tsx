@@ -8,15 +8,22 @@ import BackgroundImg from "@assets/background.png";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 
+type FormDataProps = {
+  name: string;
+  email: string;
+  password: string;
+  confirm_password: string;
+}
+
 export function SignUp() {
   const navigation = useNavigation();
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit } = useForm<FormDataProps>();
 
   function handleGoBack() {
     navigation.goBack();
   }
 
-  function handleSignUp(data: any) {
+  function handleSignUp({name, email, password, confirm_password}: FormDataProps) {
     console.log(data)
   }
 
@@ -82,7 +89,7 @@ export function SignUp() {
 
           <Controller
             control={control}
-            name="confirm-password"
+            name="confirm_password"
             render={({ field: { onChange, value } }) => (
               <Input 
                 placeholder="Confirme Senha"
