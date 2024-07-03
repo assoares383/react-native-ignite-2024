@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import {
   Center,
   Heading,
@@ -7,6 +7,7 @@ import {
   Skeleton,
   Text,
   VStack,
+  useToast
 } from "native-base";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
@@ -24,6 +25,8 @@ export function Profile() {
     "https://avatars.githubusercontent.com/u/15836394?v=4"
   );
 
+  const toast = useToast();
+
   async function handleUserPhotoSelect() {
     setPhotoIsLoading(true);
     try {
@@ -39,8 +42,12 @@ export function Profile() {
       if (photoSelected.assets[0].uri) {
         const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
         
-        if (photoInfo.size && (photoInfo.size / 1024 / 1024) > 1) {
-          return Alert.alert("Essa imagem e muito grande. Escolha uma de ate 1MB.")
+        if (photoInfo.size && (photoInfo.size / 1024 / 1024) > 5) {
+          return toast.show({
+            title: "Essa imagem e muito grande. Escolha uma de ate 5MB.",
+            placement: 'top',
+            bgColor: 'red.500'
+          })
         }
 
         setUserPhoto(photoSelected.assets[0].uri);
