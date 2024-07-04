@@ -21,6 +21,7 @@ const signUpSchema = yup.object({
   name: yup.string().required('Informe o nome'),
   email: yup.string().required('Informe o email').email('E-mail invalido'),
   password: yup.string().required('Informe a senha').min(6, 'A senha deve ter pelo menos 6 digitos!'),
+  confirm_password: yup.string().required('Confirme a senha').oneOf([yup.ref('password'), null], 'A confirmacao da senha nao confere')
 })
 
 export function SignUp() {
@@ -123,6 +124,7 @@ export function SignUp() {
                 value={value}
                 onSubmitEditing={handleSubmit(handleSignUp)}
                 returnKeyType="send"
+                errorMessage={errors.confirm_password?.message} 
               />
             )}
           />
