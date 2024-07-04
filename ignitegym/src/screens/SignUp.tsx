@@ -59,12 +59,17 @@ export function SignUp() {
               required: 'Informe o nome.'
             }}
             render={({ field: { onChange, value } }) => (
-              <Input placeholder="Nome" onChangeText={onChange} value={value} />
+              <Input 
+                placeholder="Nome"
+                onChangeText={onChange} 
+                value={value} 
+                errorMessage={errors.name?.message} 
+              />
             )}
           />
 
           <Text color="white">
-            {errors.name?.message}
+            
           </Text>
 
           <Controller
