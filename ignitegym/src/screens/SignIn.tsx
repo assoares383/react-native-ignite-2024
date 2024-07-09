@@ -1,6 +1,15 @@
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigation } from "@react-navigation/native";
-import { Center, Heading, Image, ScrollView, Text, VStack, useToast } from "native-base";
+import {
+  Center,
+  Heading,
+  Image,
+  ScrollView,
+  Text,
+  VStack,
+  useToast,
+} from "native-base";
 
 import { AuthNavigatorRoutesProps } from "../routes/auth.routes";
 
@@ -19,6 +28,8 @@ type FormData = {
 };
 
 export function SignIn() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const { signIn } = useAuth();
   const navigation = useNavigation<AuthNavigatorRoutesProps>();
   const toast = useToast();
@@ -35,16 +46,21 @@ export function SignIn() {
 
   async function handleSignIn({ email, password }: FormData) {
     try {
-      await signIn(email, password)
+      setIsLoading(true);
+      await signIn(email, password);
     } catch (error) {
-      const isAppError= error instanceof AppError;
-      const title = isAppError ? error.message : 'Nao foi possivel entrar. Tente novamente mais tarde.'
-      
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Nao foi possivel entrar. Tente novamente mais tarde.";
+
+      setIsLoading(false);
+
       toast.show({
         title,
-        placement: 'top',
-        bgColor: 'red.500'
-      })
+        placement: "top",
+        bgColor: "red.500",
+      });
     }
   }
 
@@ -104,7 +120,11 @@ export function SignIn() {
             )}
           />
 
-          <Button title="Acessar" onPress={handleSubmit(handleSignIn)} />
+          <Button
+            title="Acessar"
+            onPress={handleSubmit(handleSignIn)}
+            isLoading={isLoading}
+          />
         </Center>
 
         <Center mt={24}>
