@@ -1,70 +1,111 @@
-import { useNavigation } from '@react-navigation/native';
-import { Center, Heading, Image, ScrollView, Text, VStack  } from 'native-base';
+import { Controller, useForm } from "react-hook-form";
+import { useNavigation } from "@react-navigation/native";
+import { Center, Heading, Image, ScrollView, Text, VStack } from "native-base";
 
-import { AuthNavigatorRoutesProps } from '@routes/auth.routes';
+import { AuthNavigatorRoutesProps } from "../routes/auth.routes";
 
-import LogoSvg from '@assets/logo.svg';
-import BackgroundImg from '@assets/background.png';
+import { useAuth } from "../hooks/useAuth";
 
-import { Button } from '../components/Button';
-import { Input } from '../components/Input';
+import LogoSvg from "@assets/logo.svg";
+import BackgroundImg from "@assets/background.png";
+
+import { Button } from "../components/Button";
+import { Input } from "../components/Input";
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 export function SignIn() {
-    const navigation = useNavigation<AuthNavigatorRoutesProps>();
+  const { signIn } = useAuth();
 
-    function handleNewAccount() {
-        navigation.navigate('signUp')
-    }
+  const navigation = useNavigation<AuthNavigatorRoutesProps>();
 
-    return (
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-            <VStack flex={1} px={10} pb={16} >
-                <Image 
-                    source={BackgroundImg}
-                    defaultSource={BackgroundImg}
-                    alt='Pessoas treinando'
-                    resizeMode="cover"
-                    position="absolute"
-                />
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
-                <Center my={24}>
-                    <LogoSvg />
+  function handleNewAccount() {
+    navigation.navigate("signUp");
+  }
 
-                    <Text color="gray.100" fontSize="sm">
-                        Treine sua mente e o seu corpo
-                    </Text>
-                </Center>
+  function handleSignIn({ email, password }: FormData) {
+    signIn(email, password)
+  }
 
-                <Center>
-                    <Heading color="gray.100" fontSize="xl" mb={6} fontFamily="heading">
-                        Acesse sua conta
-                    </Heading>
+  return (
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      showsVerticalScrollIndicator={false}
+    >
+      <VStack flex={1} px={10} pb={16}>
+        <Image
+          source={BackgroundImg}
+          defaultSource={BackgroundImg}
+          alt="Pessoas treinando"
+          resizeMode="cover"
+          position="absolute"
+        />
 
-                    <Input 
-                        placeholder='E-mail' 
-                        keyboardType='email-address'
-                        autoCapitalize='none'
-                    />
+        <Center my={24}>
+          <LogoSvg />
 
-                    <Input 
-                        placeholder='Senha'
-                        secureTextEntry
-                    />
+          <Text color="gray.100" fontSize="sm">
+            Treine sua mente e o seu corpo
+          </Text>
+        </Center>
 
-                    <Button title="Acessar" />
-                </Center>
+        <Center>
+          <Heading color="gray.100" fontSize="xl" mb={6} fontFamily="heading">
+            Acesse sua conta
+          </Heading>
 
-                <Center mt={24}>
-                    <Text color="gray.100" fontFamily="body" fontSize="sm" mb={3}>
-                        Ainda nao tem acesso?
-                    </Text>
-                    <Button 
-                        title="Criar conta" 
-                        variant="outline"
-                        onPress={handleNewAccount}
-                    />
-                </Center>
-            </VStack>
-        </ScrollView>
-    )
+          <Controller
+            control={control}
+            name="email"
+            rules={{ required: "Informe o e-mail" }}
+            render={({ field: { onChange } }) => (
+              <Input
+                placeholder="E-mail"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                onChangeText={onChange}
+                errorMessage={errors.email?.message}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="password"
+            rules={{ required: "Informe a senha" }}
+            render={({ field: { onChange } }) => (
+              <Input
+                placeholder="Senha"
+                secureTextEntry
+                onChangeText={onChange}
+                errorMessage={errors.password?.message}
+              />
+            )}
+          />
+
+          <Button title="Acessar" onPress={handleSubmit(handleSignIn)} />
+        </Center>
+
+        <Center mt={24}>
+          <Text color="gray.100" fontFamily="body" fontSize="sm" mb={3}>
+            Ainda nao tem acesso?
+          </Text>
+          <Button
+            title="Criar conta"
+            variant="outline"
+            onPress={handleNewAccount}
+          />
+        </Center>
+      </VStack>
+    </ScrollView>
+  );
 }
