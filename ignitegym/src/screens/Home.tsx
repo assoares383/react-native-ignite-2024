@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { FlatList, HStack, Heading, Text, VStack, useToast } from 'native-base';
 
 import { api } from '../services/api';
@@ -13,7 +13,7 @@ import { AppError } from '../utils/AppError';
 
 export function Home() {
     const [groups, setGroups] = useState<string[]>([]);
-    const [exercises, setExercises] = useState(['Puxada frontal', 'Remada curvada', 'Remada Unilateral', 'Levantamento terras']);
+    const [exercises, setExercises] = useState<string[]>([]);
     const [groupSelected, setGroupSelected] = useState('Costas');
 
     const toast = useToast();
@@ -39,9 +39,30 @@ export function Home() {
         }
     }
 
+    async function fetchExercisesByGroup() {
+        try {
+            const response = await api.get(`/exercises/bygroup/${groupSelected}`);
+            setExercises(response.data)
+        } catch (error) {
+            const isAppError = error instanceof AppError;
+            const title = isAppError ? error.message : 'Nao foi possivel carregar os exercicios musculares';
+
+            toast.show({
+                title,
+                placement: 'top',
+                bgColor: 'red.500'
+            })
+        }
+    }
+
     useEffect(() => {
-        fetchGroups()
-    }, [])
+        fetchGroups();
+        fetchExercisesByGroup();
+    }, []);
+
+    useFocusEffect(useCallback(() => {
+        fetchExercisesByGroup();
+    }, [groupSelected]))
 
     return (
         <VStack flex={1}>
