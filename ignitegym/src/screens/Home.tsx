@@ -3,17 +3,18 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { FlatList, HStack, Heading, Text, VStack, useToast } from 'native-base';
 
 import { api } from '../services/api';
+import { AppError } from '../utils/AppError';
+import { ExerciseDTO } from '../dtos/ExerciseDTO';
 
 import { AppNavigatorRoutesProp } from '../routes/app.routes';
 
 import { ExerciseCard } from '../components/ExerciseCard';
 import { Group } from '../components/Group';
 import { HomeHeader } from '../components/HomeHeader';
-import { AppError } from '../utils/AppError';
 
 export function Home() {
     const [groups, setGroups] = useState<string[]>([]);
-    const [exercises, setExercises] = useState<string[]>([]);
+    const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
     const [groupSelected, setGroupSelected] = useState('Costas');
 
     const toast = useToast();
