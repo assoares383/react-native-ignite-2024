@@ -25,12 +25,14 @@ import SeriesSvg from "@assets/series.svg";
 import RepetitionsSvg from "@assets/repetitions.svg";
 
 import { Button } from "../components/Button";
+import { Loading } from "../components/Loading";
 
 type RouteParamsProps = {
   exerciseId: string;
 };
 
 export function Exercise() {
+  const [isLoading, SetIsLoading] = useState(true)
   const [exercise, setExercise] = useState<ExerciseDTO>({} as ExerciseDTO);
 
   const navigation = useNavigation<AppNavigatorRoutesProps>();
@@ -46,8 +48,9 @@ export function Exercise() {
 
   async function fetchExerciseDetails() {
     try {
+      SetIsLoading(true);
+
       const response = await api.get(`/exercises/${exerciseId}`);
-      console.log(response.data)
       setExercise(response.data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -60,6 +63,8 @@ export function Exercise() {
         placement: "top",
         bgColor: "red.500",
       });
+    } finally {
+      SetIsLoading(false);
     }
   }
 
@@ -94,67 +99,45 @@ export function Exercise() {
           </HStack>
         </VStack>
 
-        <VStack p={8}>
-          <Box rounded="lg" mb={3} overflow="hidden">
-            <Image
-              source={{
-                uri: `${api.defaults.baseURL}/exercise/demo/${exercise.demo}`,
-              }}
-              alt={exercise.name}
-              w="full"
-              h="80"
-              resizeMode="cover"
-            />
-          </Box>
+        { isLoading ? <Loading /> :
+          <VStack p={8}>
+            <Box rounded="lg" mb={3} overflow="hidden">
+              <Image
+                source={{
+                  uri: `${api.defaults.baseURL}/exercise/demo/${exercise.demo}`,
+                }}
+                alt={exercise.name}
+                w="full"
+                h="80"
+                resizeMode="cover"
+              />
+            </Box>
 
-          <Box bg="gray.600" rounded="md" pb={4} px={4}>
-            <HStack
-              alignItems="center"
-              justifyContent="space-around"
-              mb={6}
-              mt={5}
-            >
-              <HStack>
-                <SeriesSvg />
-                <Text color="gray.200" ml={2}>
-                  {exercise.series} series
-                </Text>
+            <Box bg="gray.600" rounded="md" pb={4} px={4}>
+              <HStack
+                alignItems="center"
+                justifyContent="space-around"
+                mb={6}
+                mt={5}
+              >
+                <HStack>
+                  <SeriesSvg />
+                  <Text color="gray.200" ml={2}>
+                    {exercise.series} series
+                  </Text>
+                </HStack>
+                <HStack>
+                  <RepetitionsSvg />
+                  <Text color="gray.200" ml={2}>
+                    {exercise.repetitions} repeticoes
+                  </Text>
+                </HStack>
               </HStack>
-              <HStack>
-                <RepetitionsSvg />
-                <Text color="gray.200" ml={2}>
-                  {exercise.repetitions} repeticoes
-                </Text>
-              </HStack>
-            </HStack>
 
-            <Button title="Marcar como realizado" />
-          </Box>
-
-          <Box bg="gray.600" rounded="md" pb={4} px={4}>
-            <HStack
-              alignItems="center"
-              justifyContent="space-around"
-              mb={6}
-              mt={5}
-            >
-              <HStack>
-                <SeriesSvg />
-                <Text color="gray.200" ml={2}>
-                  3 series
-                </Text>
-              </HStack>
-              <HStack>
-                <RepetitionsSvg />
-                <Text color="gray.200" ml={2}>
-                  12 repeticoes
-                </Text>
-              </HStack>
-            </HStack>
-
-            <Button title="Marcar como realizado" />
-          </Box>
-        </VStack>
+              <Button title="Marcar como realizado" />
+            </Box>
+          </VStack>
+        }
       </ScrollView>
     </VStack>
   );
