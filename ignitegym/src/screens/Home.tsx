@@ -6,7 +6,7 @@ import { api } from '../services/api';
 import { AppError } from '../utils/AppError';
 import { ExerciseDTO } from '../dtos/ExerciseDTO';
 
-import { AppNavigatorRoutesProp } from '../routes/app.routes';
+import { AppNavigatorRoutesProps } from '../routes/app.routes';
 
 import { ExerciseCard } from '../components/ExerciseCard';
 import { Group } from '../components/Group';
@@ -17,10 +17,10 @@ export function Home() {
     const [isLoading, setIsLoading] = useState(true);
     const [groups, setGroups] = useState<string[]>([]);
     const [exercises, setExercises] = useState<ExerciseDTO[]>([]);
-    const [groupSelected, setGroupSelected] = useState('Costas');
+    const [groupSelected, setGroupSelected] = useState('costas');
 
     const toast = useToast();
-    const navigation = useNavigation<AppNavigatorRoutesProp>();
+    const navigation = useNavigation<AppNavigatorRoutesProps>();
     
     function handleOpenExerciseDetail(exerciseId: string) {
         navigation.navigate('exercise', { exerciseId });
