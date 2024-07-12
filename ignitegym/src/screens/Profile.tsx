@@ -28,7 +28,7 @@ type FormDataProps = {
   password: string;
   old_password: string;
   confirm_password: string;
-}
+};
 
 export function Profile() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
@@ -38,11 +38,11 @@ export function Profile() {
 
   const toast = useToast();
   const { user } = useAuth();
-  const { control } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: {
       name: user.name,
-      email: user.email
-    }
+      email: user.email,
+    },
   });
 
   async function handleUserPhotoSelect() {
@@ -77,6 +77,10 @@ export function Profile() {
     } finally {
       setPhotoIsLoading(false);
     }
+  }
+
+  async function handleProfileUpdate(data: FormDataProps) {
+    console.log(data);
   }
 
   return (
@@ -148,17 +152,46 @@ export function Profile() {
             Alterar senha
           </Heading>
 
-          <Input bg="gray.600" placeholder="Senha antiga" secureTextEntry />
-
-          <Input bg="gray.600" placeholder="Nova senha" secureTextEntry />
-
-          <Input
-            bg="gray.600"
-            placeholder="Confirme a nova senha"
-            secureTextEntry
+          <Controller
+            control={control}
+            name="old_password"
+            render={({ field: { onChange } }) => (
+              <Input
+                bg="gray.600"
+                placeholder="Senha antiga"
+                secureTextEntry
+                onChangeText={onChange}
+              />
+            )}
           />
 
-          <Button title="Atualizar" mt={4} />
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange } }) => (
+              <Input
+                bg="gray.600"
+                placeholder="Nova senha"
+                secureTextEntry
+                onChangeText={onChange}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="confirm_password"
+            render={({ field: { onChange } }) => (
+              <Input
+                bg="gray.600"
+                placeholder="Confirme a nova senha"
+                secureTextEntry
+                onChangeText={onChange}
+              />
+            )}
+          />
+
+          <Button title="Atualizar" mt={4} onPress={handleSubmit(handleProfileUpdate)} />
         </VStack>
       </ScrollView>
     </VStack>
