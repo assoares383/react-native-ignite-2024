@@ -10,10 +10,10 @@ import {
   useToast,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup'
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-import * as yup from 'yup';
+import * as yup from "yup";
 
 import { useAuth } from "../hooks/useAuth";
 
@@ -33,8 +33,18 @@ type FormDataProps = {
 };
 
 const profileSchema = yup.object({
-  name: yup.string().required('Informe o nome'),
-})
+  name: yup.string().required("Informe o nome"),
+  password: yup
+    .string()
+    .min(6, "A senha de ter pelo menos 6 digitos")
+    .nullable()
+    .transform((value) => (!!value ? value : null)),
+  confirm_password: yup
+    .string()
+    .nullable()
+    .transform((value) => (!!value ? value : null))
+    .oneOf([yup.ref("password"), null], "A confirmação de senha nao confere."),
+});
 
 export function Profile() {
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
@@ -44,12 +54,16 @@ export function Profile() {
 
   const toast = useToast();
   const { user } = useAuth();
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       name: user.name,
       email: user.email,
     },
-    resolver: yupResolver(profileSchema)
+    resolver: yupResolver(profileSchema),
   });
 
   async function handleUserPhotoSelect() {
@@ -201,7 +215,11 @@ export function Profile() {
             )}
           />
 
-          <Button title="Atualizar" mt={4} onPress={handleSubmit(handleProfileUpdate)} />
+          <Button
+            title="Atualizar"
+            mt={4}
+            onPress={handleSubmit(handleProfileUpdate)}
+          />
         </VStack>
       </ScrollView>
     </VStack>
