@@ -15,7 +15,10 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import * as yup from "yup";
 
+import { api } from "../services/api";
+
 import { useAuth } from "../hooks/useAuth";
+import { AppError } from "../utils/AppError";
 
 import { ScreenHeader } from "../components/ScreenHeader";
 import { UserPhoto } from "../components/UserPhoto";
@@ -44,16 +47,18 @@ const profileSchema = yup.object({
     .nullable()
     .transform((value) => (!!value ? value : null))
     .oneOf([yup.ref("password"), null], "A confirmação de senha nao confere.")
-    .when('password', {
+    .when("password", {
       is: (Field: any) => Field,
-      then: (schema) => 
-        schema.nullable()
-        .required('Informe a confirmação da senha')
-        .transform((value) => (!!value ? value : null))
+      then: (schema) =>
+        schema
+          .nullable()
+          .required("Informe a confirmação da senha")
+          .transform((value) => (!!value ? value : null)),
     }),
 });
 
 export function Profile() {
+  const [isUpdating, setIsUpdating] = useState(false);
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const [userPhoto, setUserPhoto] = useState(
     "https://avatars.githubusercontent.com/u/15836394?v=4"
@@ -108,7 +113,30 @@ export function Profile() {
   }
 
   async function handleProfileUpdate(data: FormDataProps) {
-    console.log(data);
+    try {
+      setIsUpdating(true);
+
+      await api.put("/users", data);
+
+      toast.show({
+        title: "Perfil atualizado com sucesso!",
+        placement: "top",
+        bgColor: "green.500",
+      });
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Nao foi possivel atualizar os dados. Tente novamente mais tarde.";
+
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "red.500",
+      });
+    } finally {
+      setIsUpdating(false);
+    }
   }
 
   return (
@@ -226,6 +254,7 @@ export function Profile() {
             title="Atualizar"
             mt={4}
             onPress={handleSubmit(handleProfileUpdate)}
+            isLoading={isUpdating}
           />
         </VStack>
       </ScrollView>
